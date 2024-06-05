@@ -51,15 +51,29 @@
             max-width: auto;
             height: 100%;
         }
+        #slideshow-button, #stop-slideshow-button {
+            margin: 10px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #slideshow-button:hover, #stop-slideshow-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-    <div id="sidebar"></div>
+    <div id="sidebar"> <button id="stop-slideshow-button" >Stop Random Slideshow</button></div>
     <div id="main-frame">
         <img id="main-image" src="tardigradialanding.jpg" alt="Select a picture">
     </div>
-    <div id="details"></div>
-    <div id="nav-bar" class="nav-bar" style="display:none;">Back</div>
+    <div id="details">
+        <button id="slideshow-button">Start Random Slideshow</button>
+
+    </div>
+    <div id="nav-bar" class="nav-bar" >Back        </div>
 
     <script>
  
@@ -269,6 +283,9 @@
         const mainImage = document.getElementById('main-image');
         const details = document.getElementById('details');
         const navBar = document.getElementById('nav-bar');
+        const slideshowButton = document.getElementById('slideshow-button');
+        const stopSlideshowButton = document.getElementById('stop-slideshow-button');
+        let slideshowTimeout;
 
         function loadItems(items, type, phylum = null) {
             sidebar.innerHTML = '';
@@ -288,7 +305,8 @@
                     } else if (type === 'creatures') {
                         currentLevel = 'pictures';
                         currentData = item;
-                        details.innerHTML = `<h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
+						
+                        details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
                         loadItems(item.pictures, 'pictures');
                     } else if (type === 'pictures') {
                         mainImage.src = item.url;
@@ -312,6 +330,56 @@
             }
         });
 
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function createRandomPlaylist() {
+            const playlist = [];
+            data.phyla.forEach(phylum => {
+                phylum.creatures.forEach(creature => {
+                    creature.pictures.forEach(picture => {
+                        playlist.push({
+                            phylum: phylum.name,
+                            creatureName: creature.name,
+                            creatureDescription: creature.description,
+                            picture
+                        });
+                    });
+                });
+            });
+            return playlist.sort(() => Math.random() - 0.5); // Shuffle the playlist
+        }
+
+        function showNextImage(playlist, index) {
+            if (index < playlist.length) {
+                const item = playlist[index];
+                mainImage.src = item.picture.url;
+                mainImage.alt = item.picture.title;
+                details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.creatureName}</h2><p>${item.creatureDescription}</p><p><strong>Phylum:</strong> ${item.phylum}</p>`;
+                slideshowTimeout = setTimeout(() => showNextImage(playlist, index + 1), 5000); // Show next image after 5 seconds
+            }
+        }
+
+        function startSlideshow() {
+            const playlist = createRandomPlaylist();
+            slideshowButton.style.display = 'none';
+            stopSlideshowButton.style.display = 'inline-block';
+            showNextImage(playlist, 0);
+        }
+
+        function stopSlideshow() {
+            clearTimeout(playlist);
+            slideshowButton.style.display = 'inline-block';
+            stopSlideshowButton.style.display = 'none';
+        }
+
+        slideshowButton.addEventListener('click', startSlideshow);
+         stopSlideshowButton.addEventListener('click', () => {
+            clearInterval(playlist.length);
+         //   slideshowButton.style.display = 'block';
+          //  stopSlideshowButton.style.display = 'none';
+        });
         document.addEventListener('DOMContentLoaded', () => {
             loadItems(data.phyla, 'phyla');
         });
