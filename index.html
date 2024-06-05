@@ -287,6 +287,36 @@
         const stopSlideshowButton = document.getElementById('stop-slideshow-button');
         let slideshowTimeout;
 
+		
+		// Flag to check if text-to-speech is enabled
+    var isSpeechEnabled = true;
+    
+    // Function to speak the text
+    function speakText(text) {
+      if (isSpeechEnabled && 'speechSynthesis' in window) {
+        var msg = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(msg);
+      } else if (!('speechSynthesis' in window)) {
+        alert('Sorry, your browser does not support text-to-speech.');
+      }
+    }
+
+    // Function to set the text to be spoken and flag to check if speech is enabled
+    function setSpeech(text, flag) {
+      isSpeechEnabled = flag;
+      if (isSpeechEnabled) {
+        speakText(text);
+      }
+    }
+
+    // Example usage: Automatically speak text when the document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      var textToSpeak = 'Welcome to Tardigradia Land Oh Lil';
+      var speechFlag = true; // Change this to false to disable speech
+      setSpeech(textToSpeak, speechFlag);
+    });
+		
+		
         function loadItems(items, type, phylum = null) {
             sidebar.innerHTML = '';
             items.forEach((item) => {
@@ -353,12 +383,17 @@
 
         function showNextImage(playlist, index) {
             if (index < playlist.length) {
+		
                 const item = playlist[index];
                 mainImage.src = item.picture.url;
                 mainImage.alt = item.picture.title;
+				      var textToSpeak = item.creatureName + ' of the phylum ' + item.phylum;
+      var speechFlag = true; // Change this to false to disable speech
+      setSpeech(textToSpeak, speechFlag);
                 details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.creatureName}</h2><p>${item.creatureDescription}</p><p><strong>Phylum:</strong> ${item.phylum}</p>`;
                 slideshowTimeout = setTimeout(() => showNextImage(playlist, index + 1), 5000); // Show next image after 5 seconds
-            }
+           
+			}
         }
 
         function startSlideshow() {
@@ -366,6 +401,7 @@
             slideshowButton.style.display = 'none';
             stopSlideshowButton.style.display = 'inline-block';
             showNextImage(playlist, 0);
+		
         }
 
         function stopSlideshow() {
@@ -383,6 +419,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadItems(data.phyla, 'phyla');
         });
+		
+		
+		
+		
+		
+		
+		
     </script>
 </body>
 </html>
