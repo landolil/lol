@@ -11,15 +11,14 @@
         <button id="stop-slideshow-button" class="button">Stop Random Slideshow</button>
     </div>
     <div id="main-frame">
-	<h1>Tardigradia<br>land'o'lil</h1>
-        <!img id="main-image" src="tardigradialanding.jpg" alt="Select a picture">
+        <img id="main-image" src="clearpixle.gif" alt="Select a picture" width='100%' >
     </div>
     <div id="details">
         <button id="slideshow-button" class="button">Start Random Slideshow</button>
         <button id="release-microbes-button" class="button">Invite 400 <br>Tardigradians</button>
         <button id="spin-microbes-button" class="button">Almost Working <br>Spin 400<br>Tardigradians</button>
-		<br>
-		<img id="main-image" src="tardigradialanding.jpg" alt="Select a picture" width="150px" height="auto">
+        <br>
+        <img id="main-image" src="tardigradialanding.jpg" alt="Select a picture" width="150px" height="auto">
     </div>
     <div id="nav-bar" class="nav-bar">Back</div>
 
@@ -29,7 +28,7 @@
     <script src="js/slideshow.js"></script>
     <script src="js/movingIcons.js"></script>
     <script src="js/randomIcons.js"></script>
-    <script src="js/spinningIcons.js"></script>
+    <script src="js/spiningIcons.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadItems(data.phyla, 'phyla');
@@ -37,6 +36,7 @@
             document.getElementById('release-microbes-button').addEventListener('click', () => {
                 const allImageUrls = createRandomIcons();
                 createMovingIcons(allImageUrls);
+      //          document.getElementById('main-image').src = 'images/whitepixle.jpg'; // Change the main image
             });
 
             document.getElementById('spin-microbes-button').addEventListener('click', () => {

@@ -14,6 +14,7 @@ function loadItems(items, type, phylum = null) {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('picture-item');
         if (type === 'pictures') {
+			mainImage.src = 'images/whitepixle.jpg';
             itemDiv.innerHTML = `<img src="${item.url}" alt="${item.title}" class="thumbnail"><div>${item.title}</div>`;
         } else {
             itemDiv.innerHTML = item.name;

@@ -27,7 +27,7 @@ function createMovingIcons(imageUrls, maxIcons = MAX_ICONS) {
         // Add event listeners for load and error
         icon.addEventListener('load', () => {
             movingIconsContainer.appendChild(icon);
-            icon.style.opacity = '.97'; // Fade-in to 70% opacity
+            icon.style.opacity = '.97'; // Fade-in to 97% opacity
         });
 
         icon.addEventListener('error', () => {
@@ -35,7 +35,7 @@ function createMovingIcons(imageUrls, maxIcons = MAX_ICONS) {
             icon.remove();
         });
 
-        const duration = Math.random() * 45 + 5; // 5 to 10 seconds
+        const duration = Math.random() * 45 + 5; // 5 to 50 seconds
         icon.style.animation = `move ${duration}s ease-in-out infinite`;
 
         // Ensure the icon reappears when it leaves the screen
