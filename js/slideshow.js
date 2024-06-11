@@ -26,7 +26,8 @@ function startRandomSlideshow() {
     const randomPicture = getRandomItem(playlist);
     mainImage.src = randomPicture.url;
     mainImage.alt = randomPicture.title;
-    details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${randomPicture.title}</h2><p>${randomPicture.description}</p>`;
+    details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${randomPicture.title}</h2>`;
+	// <p>${randomPicture.description}</p>
     slideshowTimeout = setTimeout(startRandomSlideshow, 3000); // 3 seconds interval
 }
 

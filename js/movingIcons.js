@@ -13,7 +13,7 @@ function createMovingIcons(imageUrls, maxIcons = MAX_ICONS) {
 
     const selectedIcons = imageUrls.slice(0, maxIcons);
     selectedIcons.forEach(url => {
-        const iconUrl = url.replace(/\.(jpg|jpeg)$/i, '_icon.jpg');
+        const iconUrl = url.replace(/\.(jpg|jpeg)$/i, '_icon.png');
         const icon = document.createElement('img');
         icon.src = iconUrl;
         icon.classList.add('icon');
