@@ -16,7 +16,7 @@ body {
     width: 60%;
     padding: 2px;
     text-align: center;
-    overflow: hidden;
+    overflow: auto;
 }
 #details {
     width: 30%;

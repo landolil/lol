@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tardigradia</title>
+    <title>Tardigradia  :  land 'o' lil</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -11,15 +11,19 @@
         <button id="stop-slideshow-button" class="button">Stop Random Slideshow</button>
     </div>
     <div id="main-frame">
-        <img id="main-image" src="clearpixle.gif" alt="Select a picture" width='100%' >
+        <img id="main-image" src="clearpixle.gif" alt="Select a picture" width='100%'>
     </div>
     <div id="details">
-        <button id="slideshow-button" class="button">Start Random Slideshow</button>
-        <button id="release-microbes-button" class="button">Invite 400 <br>Tardigradians</button>
-        <button id="spin-microbes-button" class="button">Almost Working <br>Spin 400<br>Tardigradians</button>
-        <br>
-        <img id="main-image" src="tardigradialanding.jpg" alt="Select a picture" width="150px" height="auto">
-    </div>
+     <center><h1>Tardigradia<br>land'o'lil<br></h1>
+     <button id="slideshow-button" class="button"  style="padding: 3;" >Start Random Slideshow</button> <br>
+     <button id="release-microbes-button" class="button"  style="padding: 3;">Release 400 Tardigradians</button>  <br>
+
+     <button id="founding-crowdsource-button" class="button" style="padding: 3;">Founding CrowdSource Information</button> <br>
+     <button id="download-pdf-button" class="button">Download Crowdsource PDF</button>
+	 <img id="main-image" src="tardigradialanding.jpg" alt="Select a picture" width="150px" height="auto">
+	      <button id="spin-microbes-button" class="button" style="padding: 3;">...</button>  <br>
+    </center>
+	</div>
     <div id="nav-bar" class="nav-bar">Back</div>
 
     <script src="js/data.js"></script>
@@ -29,6 +33,7 @@
     <script src="js/movingIcons.js"></script>
     <script src="js/randomIcons.js"></script>
     <script src="js/spinningIcons.js"></script>
+    <script src="js/crowdsource.js"></script> <!-- Include the new JavaScript file -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadItems(data.phyla, 'phyla');
@@ -36,13 +41,20 @@
             document.getElementById('release-microbes-button').addEventListener('click', () => {
                 const allImageUrls = createRandomIcons();
                 createMovingIcons(allImageUrls);
-      //          document.getElementById('main-image').src = 'images/whitepixle.jpg'; // Change the main image
             });
 
             document.getElementById('spin-microbes-button').addEventListener('click', () => {
                 const allImageUrls = createRandomIcons();
                 createSpinningIcons(allImageUrls);
             });
+
+            document.getElementById('founding-crowdsource-button').addEventListener('click', () => {
+                loadCrowdsourcePage('main-frame');
+            });
+			
+			    document.getElementById('download-pdf-button').addEventListener('click', () => {
+        window.location.href = 'files/Tardigradia_land_o_lil_Multiphase_Vision_2024.pdf';
+    });
         });
     </script>
 </body>

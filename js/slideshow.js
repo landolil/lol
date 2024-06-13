@@ -16,6 +16,7 @@ function createRandomPlaylist() {
             creature.pictures.forEach(picture => {
                 playlist.push(picture);
             });
+
         });
     });
     return playlist;
@@ -26,8 +27,14 @@ function startRandomSlideshow() {
     const randomPicture = getRandomItem(playlist);
     mainImage.src = randomPicture.url;
     mainImage.alt = randomPicture.title;
-    details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${randomPicture.title}</h2>`;
+    details.innerHTML = `<center><h1>Tardigradia<br>
+	land 'o' lil<br></center><</h1><h2>${randomPicture.name}</h2><p>${randomPicture.phyla}</p><p><strong>Phylum: UNDER CONSTRUCTION 'o'</strong> ${name}</p>`;
 	// <p>${randomPicture.description}</p>
+	
+ // details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
+	
+	
+	
     slideshowTimeout = setTimeout(startRandomSlideshow, 3000); // 3 seconds interval
 }
 
