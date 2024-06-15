@@ -3,73 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tardigradia  :  land 'o' lil</title>
+    <title>Tardigradia : land 'o' lil</title>
     <link rel="stylesheet" href="css/styles.css">
+ 
 </head>
 <body>
-	 <script src="js/data_background.js"></script>
-	  <script src="js/background.js"></script>
-	   <script> setRandomBackground();   </script>
 
-    <div id="sidebar">
-       	 
-    </div>
+    <script src="js/bubbledata.js"></script>
+    <script src="js/bubbles.js"></script>
+
+
+    <script src="js/data_background.js"></script>
+    <script src="js/background.js"></script>
+    <script> setRandomBackground(); </script>
+
+    <div id="sidebar"></div>
     <div id="main-frame">
-        <img id="main-image" src="clearpixle.gif" alt="Select a picture" height='100%'>
+        <img id="main-image" src="images/clearpixle.gif" alt="Select a picture" height="100%">
     </div>
     <div id="details">
-
-
-	
-    <table>
-	        <tr>
-            <td>
-              <center>   <h1>Tardigradia<br>land 'o' lil</h1></center>
-            </td>
-        </tr>
-	
-        <tr>
-            <td>
-                <button id="slideshow-button" class="button" style="padding: 1;">Start Random Slideshow</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button id="release-microbes-button" class="button" style="padding: 1;">Release 400 Tardigradians</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button id="founding-crowdsource-button" class="button" style="padding: 11;">Founding CrowdSource Information</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button id="download-pdf-button" class="button">Download Crowdsource PDF</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img id="main-image" src="tardigradialanding.jpg" alt="Select a picture" width="150px" height="auto">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button id="stop-slideshow-button" class="button">Stop Random Slideshow</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button id="spin-microbes-button" class="button" style="padding: 1;">...</button>
-            </td>
-        </tr>
-    </table>
-	</div>
+        <table>
+            <tr>
+                <td>
+                    <center><h1>Tardigradia<br>land 'o' lil</h1></center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="slideshow-button" class="button" style="padding: 1;">Start Random Slideshow</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="release-microbes-button" class="button" style="padding: 1;">Release 400 Tardigradians</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="founding-crowdsource-button" class="button" style="padding: 11;">Founding CrowdSource Information</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="download-pdf-button" class="button">Download Crowdsource PDF</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img id="main-image" src="images/tardigradialanding.jpg" alt="Select a picture" width="150px" height="auto">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="stop-slideshow-button" class="button">Stop Random Slideshow</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="spin-microbes-button" class="button" style="padding: 1;">...</button>
+                </td>
+            </tr>
+        </table>
+    </div>
     <div id="nav-bar" class="nav-bar">Back</div>
-
+    <script src="js/data_bubbles.js"></script>
+    <script src="js/bubbles.js"></script>
     <script src="js/data_creatures.js"></script>
-	<script src="js/data_bubbles.js"></script>
-	
     <script src="js/loadItems.js"></script>
     <script src="js/speech.js"></script>
     <script src="js/slideshow.js"></script>
@@ -80,8 +79,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+		
             loadItems(data.phyla, 'phyla');
-
+            createFloatingBubbles(bubbleImages);
             document.getElementById('release-microbes-button').addEventListener('click', () => {
                 const allImageUrls = createRandomIcons();
                 createMovingIcons(allImageUrls);
@@ -95,12 +95,12 @@
             document.getElementById('founding-crowdsource-button').addEventListener('click', () => {
                 loadCrowdsourcePage('main-frame');
             });
-			
-			    document.getElementById('download-pdf-button').addEventListener('click', () => {
-        window.location.href = 'files/Tardigradia_land_o_lil_Multiphase_Vision_2024.pdf';
-    });
-	
-	 
+            
+            document.getElementById('download-pdf-button').addEventListener('click', () => {
+                window.location.href = 'files/Tardigradia_land_o_lil_Multiphase_Vision_2024.pdf';
+            });
+
+            
         });
     </script>
 </body>

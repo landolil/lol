@@ -8,6 +8,52 @@ body {
     background-repeat: no-repeat;
     width: 100vw;
 }
+  
+
+    @keyframes moveUp {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(-100vh);
+        }
+    }
+
+    @keyframes sway {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-10px);
+        }
+        75% {
+            transform: translateX(10px);
+        }
+    }
+
+    @keyframes sizeChange {
+        0%, 100% {
+            transform: scale(.5);
+        }
+        50% {
+            transform: scale(0.1);
+        }
+    }
+
+    .floating-bubbles .bubble {
+        position: absolute;
+        width: 25px; /* Adjust size as needed */
+        height: 25px; /* Adjust size as needed */
+    }
+
+    .floating-bubbles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Ensure it stays in the background */
+    }
 
 table {
             width: 100%;
