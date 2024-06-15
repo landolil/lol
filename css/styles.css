@@ -1,29 +1,35 @@
-/* cs/styles.css */
-
 body {
     display: flex;
     height: 100vh;
     margin: 0;
     overflow: hidden;
+    background-size: contain;  /* Ensure the entire image fits within the viewport */
+    background-position: center;  /* Center the background image */
+    background-repeat: no-repeat;
+    width: 100vw;
 }
+
 #sidebar {
     width: 20%;
     background-color: #f4f4f4;
     padding: 2px;
     overflow-y: auto;
 }
+
 #main-frame {
     width: 60%;
     padding: 2px;
     text-align: center;
     overflow: auto;
 }
+
 #details {
     width: 30%;
     background-color: #f4f4f4;
     padding: 2px;
     overflow-y: auto;
 }
+
 .nav-bar {
     width: 30px;
     background-color: #ccc;
@@ -31,21 +37,26 @@ body {
     text-align: center;
     cursor: pointer;
 }
+
 .picture-item {
     cursor: pointer;
     margin-bottom: 2px;
 }
+
 .picture-item img {
     width: 100%;
     height: auto;
 }
+
 .picture-item:hover {
     background-color: #e0e0e0;
 }
+
 #main-frame img {
-    max-width: auto;
-    height: 100%;
+    max-width: 100%;
+    height: auto;
 }
+
 #slideshow-button, #stop-slideshow-button {
     margin: 10px;
     padding: 10px;
@@ -54,13 +65,16 @@ body {
     border: none;
     cursor: pointer;
 }
+
 #slideshow-button:hover, #stop-slideshow-button:hover {
     background-color: #0056b3;
 }
+
 .icon-container {
     position: absolute;
     animation: bobble 5s infinite ease-in-out;
 }
+
 @keyframes bobble {
     0%, 100% {
         transform: translate(0, 0) rotate(0);
@@ -69,6 +83,7 @@ body {
         transform: translate(10px, 10px) rotate(10deg);
     }
 }
+
 .moving-icons {
     position: absolute;
     top: 0;
@@ -77,15 +92,18 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
 .icon {
     position: absolute;
     width: 50px;
     height: 50px;
     transition: transform 0.5s, width 0.5s, height 0.5s;
 }
+
 .icon:hover {
     z-index: 1000;
 }
+
 @keyframes move {
     0% {
         transform: translateY(0);
@@ -97,6 +115,7 @@ body {
         transform: translateY(0);
     }
 }
+
 .microbe-icon {
     width: 50px;
     height: 50px;
