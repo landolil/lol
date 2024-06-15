@@ -9,6 +9,27 @@ body {
     width: 100vw;
 }
 
+table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            width: 100%;
+            padding: 0; /* Remove padding from table cells */
+            margin: 0;  /* Remove margin from table cells */
+        }
+        button {
+            width: 100%;
+            padding: 0px; /* Adjust padding for buttons */
+            margin: 0;  /* Remove margin from buttons */
+            box-sizing: border-box;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+
 #sidebar {
     width: 20%;
     background-color: #f4f4f4;
