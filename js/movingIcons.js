@@ -8,7 +8,7 @@ function createMovingIcons(imageUrls, maxIcons = MAX_ICONS) {
     movingIconsContainer.style.left = '0';
     movingIconsContainer.style.width = '100%';
     movingIconsContainer.style.height = '100%';
-    movingIconsContainer.style.zIndex = '-1'; // Ensure it stays in the background
+    movingIconsContainer.style.zIndex = '-4'; // Ensure it stays in the background
     document.body.appendChild(movingIconsContainer);
 
     const selectedIcons = imageUrls.slice(0, maxIcons);

@@ -9,7 +9,8 @@ function createFloatingBubbles(maxBubbles = MAX_BUBBLES) {
     bubblesContainer.style.left = '0';
     bubblesContainer.style.width = '100%';
     bubblesContainer.style.height = '100%';
-    bubblesContainer.style.zIndex = '-1'; // Ensure it stays in the background
+
+    bubblesContainer.style.zIndex = '-2'; // Ensure it stays in the background
     document.body.appendChild(bubblesContainer);
 
     for (let i = 0; i < maxBubbles; i++) {
@@ -17,7 +18,7 @@ function createFloatingBubbles(maxBubbles = MAX_BUBBLES) {
         bubble.src = BUBBLE_SVG_URL;
         bubble.classList.add('bubble');
 
-        const position = getRandomPosition(window.innerWidth - 50, window.innerHeight - 50);
+        const position = getRandomPosition(window.innerWidth - 3, window.innerHeight - 3);
         bubble.style.left = `${position.x}px`;
         bubble.style.top = `${position.y}px`;
         bubble.style.opacity = '0'; // Start with full transparency
