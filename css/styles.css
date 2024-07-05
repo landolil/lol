@@ -215,3 +215,17 @@ button:hover {
     overflow: hidden;
     z-index: -1; /* Ensure it stays in the background */
 }
+/* css/styles.css */
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-button {
+    width: 100%;
+    padding: 5px;
+    margin: 2px 0;
+    cursor: pointer;
+}
+

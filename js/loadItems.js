@@ -1,6 +1,3 @@
-
-// js/loaditems.js
-
 let currentLevel = 'phyla';
 let currentData = data;
 const sidebar = document.getElementById('sidebar');
@@ -14,7 +11,7 @@ function loadItems(items, type, phylum = null) {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('picture-item');
         if (type === 'pictures') {
-			mainImage.src = 'images/whitepixle.jpg';
+            mainImage.src = 'images/whitepixle.jpg';
             itemDiv.innerHTML = `<img src="${item.url}" alt="${item.title}" class="thumbnail"><div>${item.title}</div>`;
         } else {
             itemDiv.innerHTML = item.name;
@@ -39,6 +36,15 @@ function loadItems(items, type, phylum = null) {
     navBar.style.display = currentLevel === 'phyla' ? 'none' : 'block';
 }
 
+function initialize() {
+    if (sidebar && mainImage && details && navBar && data && data.phyla) {
+        loadItems(data.phyla, 'phyla');
+        createFloatingBubbles(bubbleImages);
+    } else {
+        console.error('Initialization failed: Elements or data are missing.');
+    }
+}
+
 navBar.addEventListener('click', () => {
     if (currentLevel === 'creatures') {
         currentLevel = 'phyla';
@@ -50,4 +56,3 @@ navBar.addEventListener('click', () => {
         loadItems(currentData.creatures, 'creatures', currentData.phylum);
     }
 });
-
