@@ -15,30 +15,30 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reloadButton) reloadButton.addEventListener('click', () => location.reload());
 
     function startSlideshow() {
-        console.log('Start Slideshow');
+        console.log('(S) Start Slideshow');
         // Implement the slideshow start functionality
     }
 
     function releaseTardigrades() {
-        console.log('Release Tardigrades');
+        console.log('(T) Release Tardigrades');
 		                const allImageUrls = createRandomIcons();
                 createMovingIcons(allImageUrls);
         // Implement the release tardigrades functionality
     }
 
     function openCrowdSource() {
-        console.log('Open CrowdSource');
+        console.log('($) Open CrowdSource');
 		   loadCrowdsourcePage('main-frame');
         // Implement the crowdsource functionality
     }
 
     function downloadPDF() {
-        console.log('Download PDF');
+        console.log('(P) Download PDF');
         window.location.href = 'files/Tardigradia_land_o_lil_Multiphase_Vision_2024.pdf';
     }
 
     function stopSlideshow() {
-        console.log('Stop Slideshow');
+        console.log('(X) Stop Slideshow');
         // Implement the slideshow stop functionality
     }
 });
