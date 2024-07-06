@@ -1,3 +1,8 @@
+
+// js/slideshow.js
+
+const slideshowButton = document.getElementById('slideshow-button');
+const stopSlideshowButton = document.getElementById('stop-slideshow-button');
 let slideshowTimeout;
 
 function getRandomItem(array) {
@@ -11,6 +16,7 @@ function createRandomPlaylist() {
             creature.pictures.forEach(picture => {
                 playlist.push(picture);
             });
+
         });
     });
     return playlist;
@@ -19,13 +25,16 @@ function createRandomPlaylist() {
 function startRandomSlideshow() {
     const playlist = createRandomPlaylist();
     const randomPicture = getRandomItem(playlist);
-    const mainImage = document.getElementById('main-image');
-    const details = document.getElementById('details');
-    
     mainImage.src = randomPicture.url;
     mainImage.alt = randomPicture.title;
-    details.innerHTML = `<center><h1>Tardigradia<br>land 'o' lil</center></h1><h2>${randomPicture.name}</h2><p>${randomPicture.phyla}</p><p><strong>Phylum:</strong> ${randomPicture.phylum}</p>`;
-    
+    details.innerHTML = `<center><h1>Tardigradia<br>
+	land 'o' lil<br></center><</h1><h2>${randomPicture.name}</h2><p>${randomPicture.phyla}</p><p><strong>Phylum: UNDER CONSTRUCTION 'o'</strong> ${name}</p>`;
+	// <p>${randomPicture.description}</p>
+	
+ // details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
+	
+	
+	
     slideshowTimeout = setTimeout(startRandomSlideshow, 3000); // 3 seconds interval
 }
 
@@ -33,10 +42,6 @@ function stopRandomSlideshow() {
     clearTimeout(slideshowTimeout);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const slideshowButton = document.getElementById('slideshow-button');
-    const stopSlideshowButton = document.getElementById('stop-slideshow-button');
-    
-    slideshowButton.addEventListener('click', startRandomSlideshow);
-    stopSlideshowButton.addEventListener('click', stopRandomSlideshow);
-});
+slideshowButton.addEventListener('click', startRandomSlideshow);
+stopSlideshowButton.addEventListener('click', stopRandomSlideshow);
+
