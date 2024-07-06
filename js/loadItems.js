@@ -1,10 +1,16 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 // js/loaditems.js
 
 =======
 >>>>>>> parent of ddbc44d (fix menue)
+=======
+
+// js/loaditems.js
+
+>>>>>>> parent of ff621ce (Menue)
 let currentLevel = 'phyla';
 let currentData = data;
 const sidebar = document.getElementById('sidebar');
@@ -91,7 +97,7 @@ function loadItems(items, type, phylum = null) {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('picture-item');
         if (type === 'pictures') {
-            mainImage.src = 'images/whitepixle.jpg';
+			mainImage.src = 'images/whitepixle.jpg';
             itemDiv.innerHTML = `<img src="${item.url}" alt="${item.title}" class="thumbnail"><div>${item.title}</div>`;
 >>>>>>> parent of ddbc44d (fix menue)
         } else {
@@ -119,6 +125,7 @@ function loadItems(items, type, phylum = null) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 function initialize() {
     if (sidebar && mainImage && details && navBar && data && data.phyla) {
@@ -130,6 +137,8 @@ function initialize() {
 }
 
 >>>>>>> parent of ddbc44d (fix menue)
+=======
+>>>>>>> parent of ff621ce (Menue)
 navBar.addEventListener('click', () => {
     if (currentLevel === 'creatures') {
         currentLevel = 'phyla';
