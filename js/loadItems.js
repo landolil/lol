@@ -4,17 +4,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 
 // js/loaditems.js
 
 =======
 >>>>>>> parent of ddbc44d (fix menue)
-=======
-
-// js/loaditems.js
-
->>>>>>> parent of ff621ce (Menue)
 =======
 
 // js/loaditems.js
@@ -153,7 +147,6 @@ function loadItems(items, type, phylum = null) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
 function initialize() {
     if (sidebar && mainImage && details && navBar && data && data.phyla) {
@@ -165,8 +158,6 @@ function initialize() {
 }
 
 >>>>>>> parent of ddbc44d (fix menue)
-=======
->>>>>>> parent of ff621ce (Menue)
 =======
 >>>>>>> parent of ff621ce (Menue)
 =======
