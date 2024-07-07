@@ -27,7 +27,15 @@ function loadItems(items, type, phylum = null) {
             } else if (type === 'creatures') {
                 currentLevel = 'pictures';
                 currentData = item;
-                details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
+                details.innerHTML = `
+
+<center><H1>
+Tardi</br>
+gradia</br>
+land</br>
+'o'</br>
+lil</h1> </center>
+<h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
                 loadItems(item.pictures, 'pictures');
             } else if (type === 'pictures') {
                 mainImage.src = item.url;

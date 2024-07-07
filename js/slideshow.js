@@ -27,8 +27,18 @@ function startRandomSlideshow() {
     const randomPicture = getRandomItem(playlist);
     mainImage.src = randomPicture.url;
     mainImage.alt = randomPicture.title;
-    details.innerHTML = `<center><h1>Tardigradia<br>
-	land 'o' lil<br></center><</h1><h2>${randomPicture.name}</h2><p>${randomPicture.phyla}</p><p><strong>Phylum: UNDER CONSTRUCTION 'o'</strong> ${name}</p>`;
+    details.innerHTML = `
+<center><H1>
+Tardi</br>
+gradia</br>
+land</br>
+'o'</br>
+lil</h1> </center>
+
+
+<</h1><h2>${randomPicture.name}</h2><p>${randomPicture.phylum}</p><p><strong>Phylum: UNDER CONSTRUCTION 'o'</strong> ${name}</p>
+
+`;
 	// <p>${randomPicture.description}</p>
 	
  // details.innerHTML = `<center><h1>Tardigradia<br>land'o'lil<br></center></h1><h2>${item.name}</h2><p>${item.description}</p><p><strong>Phylum:</strong> ${phylum}</p>`;
@@ -41,7 +51,4 @@ function startRandomSlideshow() {
 function stopRandomSlideshow() {
     clearTimeout(slideshowTimeout);
 }
-
-slideshowButton.addEventListener('click', startRandomSlideshow);
-stopSlideshowButton.addEventListener('click', stopRandomSlideshow);
 

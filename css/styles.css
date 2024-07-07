@@ -77,30 +77,30 @@ table {
 
 
 #sidebar {
-    width: 20%;
+    width: 18%;
     background-color: #f4f4f4;
-    padding: 2px;
+    padding: 0px;
     overflow-y: auto;
 }
 
 #main-frame {
-    width: 60%;
-    padding: 2px;
+    width: 70%;
+    padding: 0px;
     text-align: center;
     overflow: auto;
 }
 
 #details {
-    width: 30%;
+    width: 12%;
     background-color: #f4f4f4;
-    padding: 2px;
+    padding: 0px;
     overflow-y: auto;
 }
 
 .nav-bar {
     width: 30px;
     background-color: #ccc;
-    padding: 2px;
+    padding: 1px;
     text-align: center;
     cursor: pointer;
 }
@@ -214,4 +214,17 @@ button:hover {
     height: 100%;
     overflow: hidden;
     z-index: -1; /* Ensure it stays in the background */
+}
+/* css/styles.css */
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-button {
+    width: 100%;
+    padding: 5px;
+    margin: 2px 0;
+    cursor: pointer;
 }
