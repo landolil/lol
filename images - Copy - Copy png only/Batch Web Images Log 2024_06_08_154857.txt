@@ -1,0 +1,20 @@
+~/Documents/GitHub/lol/images/03_Acidobacterium_Capsulatum/Acidobacterium_Capsulatum_Gemini_46gbxb46gbxb46gb.jpg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/03_Acidobacterium_Capsulatum/Acidobacterium_Capsulatum_Gemini_46gbxc46gbxc46gb.jpg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/05_Bifidobacterium_Bifidum/Bifidobacterium_Bifidum_Gemini_824f9q824f9q824f.jpg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/06_Bifidobacterium_Longum/Bifidobacterium_Longum_Gemini_4xk6mf4xk6mf4xk6.jpg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/06_Bifidobacterium_Longum/Bifidobacterium_Longum_Gemini_io5tljio5tljio5t.jpg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/132_Staphylococcus_Aureus/Staphylococcus_Aureus_Gemini_j04nphj04nphj04n.jpeg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/133_Streptococcus_Pyogenes/Streptococcus_Pyogenes_Gemini_ol3ggpol3ggpol3g.jpeg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/133_Streptococcus_Pyogenes/Streptococcus_Pyogenes_Gemini_ol3ggrol3ggrol3g.jpeg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/133_Streptococcus_Pyogenes/Streptococcus_Pyogenes_Gemini_ol3gguol3gguol3g.jpeg
+----> Failed to select subject. Background remains.
+~/Documents/GitHub/lol/images/148_Chrysococcus_Rufescens/Chrysococcus_Rufescens_Gemini_j9k957j9k957j9k9.jpeg
+----> Failed to select subject. Background remains.
