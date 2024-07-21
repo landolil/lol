@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
         C: 'CrowdSource',
         P: 'PDF',
         X: 'Stop Slideshow',
-      '~': 'Reload'
-    };
+        U: 'Reload',
+        L: 'Logoshow',
+		O: 'Stop Logoshow'
+    };  
 
     // Create buttons with full text initially
     for (let key in buttons) {

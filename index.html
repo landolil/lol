@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <script src="js/bubbledata.js"></script>
+    <script src="js/games2024/g0001/init/data_bubbles.js"></script>
     <script src="js/games2024/g0001/bubbles/bubbles.js"></script>
 
 
@@ -18,8 +18,8 @@
     <script> setRandomBackground(); </script>
 
     <div id="sidebar"></div>
-    <div id="main-frame">
-        <img id="main-image" src="images/clearpixle.gif" alt="Select a picture" height="100%">
+    <div id="main-frame" top>
+    <img id="main-image" src="images/clearpixle.gif" alt="Select a picture">
     </div>
     <div id="details">
 		<center>
@@ -34,22 +34,36 @@ land</br>
     <div id="nav-bar" class="nav-bar">Back</div>
     <script src="js/games2024/g0001/init/data_bubbles.js"></script>
     <script src="js/games2024/g0001/bubbles/bubbles.js"></script>
+
+
     <script src="js/games2024/g0002/init/data_creatures.js"></script>
     <script src="js/games2024/g0002/init/loadItems.js"></script>
+    <script src="js/games2024/g0002/creature/slideshow/slideshow.js"></script>
+
     <script src="js/index/menu.js"></script>
     <script src="js/index/buttons.js"></script>
+
     <script src="js/games2024/g0006/speech/speech.js"></script>
-    <script src="js/games2024/g0002/creature/slideshow/slideshow.js"></script>
+
+
+    <script src="js/games2024/g0008/init/logo_data.js"></script>
+	<script src="js/games2024/g0008/logo/logoshow/logoshow.js"></script>
+		
+		
     <script src="js/games2024/g0002/creature/icons/movingIcons.js"></script>
     <script src="js/games2024/g0002/creature/icons/randomIcons.js"></script>
     <script src="js/games2024/g0002/creature/icons/spinningIcons.js"></script>
+
+
     <script src="js/games2024/g0003/source/crowdsource.js"></script> 
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 		
             loadItems(data.phyla, 'phyla');
+			logo_loadItems(data.ENGLISH, 'ENGLISH');
             createFloatingBubbles(bubbleImages);
+		
 			
 			
 			

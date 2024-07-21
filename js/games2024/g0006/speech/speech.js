@@ -5,7 +5,7 @@ var isSpeechEnabled = true;
 function speakText(text) {
   if (isSpeechEnabled && 'speechSynthesis' in window) {
     var msg = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(msg);
+  //  window.speechSynthesis.speak(msg);
   } else if (!('speechSynthesis' in window)) {
     alert('Sorry, your browser does not support text-to-speech.');
   }
@@ -15,7 +15,7 @@ function speakText(text) {
 function setSpeech(text, flag) {
   isSpeechEnabled = flag;
   if (isSpeechEnabled) {
-    speakText(text);
+ //   speakText(text);
   }
 }
 
