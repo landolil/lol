@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
         X: 'Stop Slideshow',
         U: 'Reload',
         L: 'Logoshow',
-		O: 'Stop Logoshow'
-    };  
 
+    };  
+//  	N: 'Stencilshow'
     // Create buttons with full text initially
     for (let key in buttons) {
         const button = document.createElement('button');

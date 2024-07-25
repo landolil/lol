@@ -1,4 +1,4 @@
-const MAX_ICONS = 400; // You can change this value later if needed
+const MAX_ICONS = 222; // You can change this value later if needed
 
 function createMovingIcons(imageUrls, maxIcons = MAX_ICONS) {
     const movingIconsContainer = document.createElement('div');

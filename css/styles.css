@@ -77,21 +77,21 @@ table {
 
 
 #sidebar {
-    width: 18%;
+    width: 15%;
     background-color: #f4f4f4;
     padding: 0px;
     overflow-y: auto;
 }
 
 #main-frame {
-    width: 76%;
+    width: 80%;
     padding: 0px;
     text-align: center;
     overflow: auto;
 }
 
 #details {
-    width: 12%;
+    width: 15%;
     background-color: #f4f4f4;
     padding: 0px;
     overflow-y: auto;

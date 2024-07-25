@@ -7,8 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const crowdSourceButton = document.getElementById('crowdsource-button');
     const pdfButton = document.getElementById('pdf-button');
     const stopSlideshowButton = document.getElementById('stop-slideshow-button');
-	const logoshowButton = document.getElementById('logoshow-button');
-    const stopLogoshowButton = document.getElementById('stop-logoshow-button');
+    const logoshowButton = document.getElementById('logoshow-button');
+//    const stencilshowButton = document.getElementById('stencilshow-button');
+ //   const stopLogoshowButton = document.getElementById('stop-logoshow-button');
+
     const reloadButton = document.getElementById('reload-button');
 
     if (slideshowButton) slideshowButton.addEventListener('click', startRandomSlideshow);
@@ -20,9 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (reloadButton) reloadButton.addEventListener('click', () => location.reload());
 
-	if (logoshowButton) logoshowButton.addEventListener('click', startLogoshow);
+    if (logoshowButton) logoshowButton.addEventListener('click', startLogoshow);
+
+   // if (stencilshowButton) stencilshowButton.addEventListener('click', startStencilshow);
 	
-    if (stopLogoshowButton) stopLogoshowButton.addEventListener('click', stopRandomLogoshow);
+   // if (stopLogoshowButton) stopLogoshowButton.addEventListener('click', stopRandomLogoshow);
 	
 
 	
@@ -66,10 +70,20 @@ document.addEventListener('DOMContentLoaded', () => {
     //     Implement the logoshow start functionality
     }
 
-	    function stopLogoshow() {
-        console.log('(S) Stop Logoshow');
-		stopRandomLogoshow();
+//  function startStencilshow() {
+ //      console.log('(S) Start Stencilshow');
+//	   startRandomStencilshow();
+    //     Implement the stencilshow start functionality
+ //   }
+
+
+//	    function stopLogoshow() {
+ //       console.log('(S) Stop Logoshow');
+//		stopRandomLogoshow();
    //      Implement the logoshow stop functionality
-   }
-		startRandomLogoshow();
+ //  }
+
+		        const allImageUrls = createRandomIcons();
+                createMovingIcons(allImageUrls);
+    startRandomLogoshow();
 });

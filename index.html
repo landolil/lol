@@ -48,7 +48,9 @@ land</br>
 
     <script src="js/games2024/g0008/init/logo_data.js"></script>
 	<script src="js/games2024/g0008/logo/logoshow/logoshow.js"></script>
-		
+
+    <script src="js/games2024/g0009/init/stencil_data.js"></script>
+	<script src="js/games2024/g0009/stencil/stencilshow/stencilshow.js"></script>
 		
     <script src="js/games2024/g0002/creature/icons/movingIcons.js"></script>
     <script src="js/games2024/g0002/creature/icons/randomIcons.js"></script>
@@ -61,7 +63,9 @@ land</br>
         document.addEventListener('DOMContentLoaded', () => {
 		
             loadItems(data.phyla, 'phyla');
-			logo_loadItems(data.ENGLISH, 'ENGLISH');
+	    logo_loadItems(data.ENGLISH, 'ENGLISH');
+	    stencil_loadItems(data.STENCIL, 'STENCIL');
+
             createFloatingBubbles(bubbleImages);
 		
 			

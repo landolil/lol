@@ -1,7 +1,7 @@
-const logo_data = {
-    ENGLISH: [
+const stencil_data = {
+    STENCIL: [
         {
-            name: 'ENGLISH',
+            name: 'STENCIL',
             COLOR_STYLE: [
                 {
                     name: 'Color Style 1',
