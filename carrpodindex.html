@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Chosen Palette: Minimalist White, Gray, and Blue -->
+    <!-- 
+        Application Structure Plan: 
+        The structure is a complete redesign based on the user's request.
+        1.  Top Bar (fixed): A thin 'nav' element at the top. It contains a "G" button (toggles dropdown) and a text display for the current 'Owner-Repo-Path'. This provides minimal UI, focusing the screen on content.
+        2.  Dropdown Menu (hidden): A 'div' that toggles visibility. It contains the GitHub repo form (Owner, Repo, Path) and the analysis results table. This hides the "boring" controls, fulfilling the "G" button menu request.
+        3.  Slideshow Container (main): A 'div' that fills the entire screen below the top bar. It's dedicated to displaying images.
+        
+        User Flow:
+        1.  Page loads, pre-loads, and analyzes the default repo path.
+        2.  If images are found, a random slideshow starts automatically, filling the main container.
+        3.  The user sees the "G" button and 'Owner-Repo-Path' text.
+        4.  Clicking "G" reveals the dropdown to input a new path or see the file list.
+        5.  Submitting a new path triggers a new analysis, updating the file list and restarting the slideshow with new images.
+        This structure was chosen to transform the original utility app into a visual-first "theater" experience as requested, while retaining the core analysis functionality in a compact, hidden-by-default menu.
+    -->
+    <!-- 
+        Visualization & Content Choices:
+        1.  Report Info: GitHub Directory Contents (File List)
+            Goal: Inform the user of directory contents.
+            Viz/Presentation: HTML Table (as requested, but modified).
+            Interaction: None (static list).
+            Justification: User explicitly asked for the "same table format" in a dropdown. NOTE: The API call had to be changed from reading a text file to querying the GitHub contents API to get file types for the slideshow. This means the table content is *different* (showing API data like name, type, size) but presented in a table with "very tight padding" as requested.
+            Library/Method: Dynamic HTML Table generation.
+
+        2.  Report Info: GitHub Directory Contents (Image Files)
+            Goal: Visually display all graphic files.
+            Viz/Presentation: Full-screen automated slideshow.
+            Interaction: Automatic, random, non-repeating (until all shown).
+            Justification: This is the user's primary new feature request.
+            Library/Method: Vanilla JS logic managing an '<img>' tag's 'src', using 'setTimeout', and a shuffled index array for randomization.
+
+        3.  Report Info: App State (Current Repo Path)
+            Goal: Show user the currently active path.
+            Viz/Presentation: Simple text string 'Owner-Repo-Path' in the top bar.
+            Interaction: Updates on new analysis.
+            Justification: Fulfills user's request for this exact text display.
+            Library/Method: DOM textContent update.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Image Slideshow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; 
+        }
+        #slideshowImage {
+            transition: opacity 9.5s ease-in-out;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 h-12 bg-gray-800 shadow-md flex items-center justify-between px-4 z-50">
+        <div class="flex items-center space-x-3">
+            <!-- "G" Button -->
+            <button id="gButton" class="bg-gray-700 hover:bg-gray-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center">
+                G
+            </button>
+            
+            <!-- Repo Info Display -->
+            <span id="repoInfo" class="text-sm text-gray-300 font-mono whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[calc(100vw-100px)]">
+                Owner-Repo-Path
+            </span>
+        </div>
+    </nav>
+
+    <!-- Dropdown Menu (for controls and file list) -->
+    <div id="dropdownMenu" class="hidden fixed top-12 left-0 right-0 bg-gray-800 shadow-lg z-40 p-4 border-t border-gray-700 max-h-[calc(100vh-3rem)] overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+            <form id="repoForm" class="space-y-3">
+                <div>
+                    <label for="owner" class="block text-xs font-medium text-gray-400">Owner</label>
+                    <input type="text" id="owner" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" required>
+                </div>
+                <div>
+                    <label for="repo" class="block text-xs font-medium text-gray-400">Repo</label>
+                    <input type="text" id="repo" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" required>
+                </div>
+                <div>
+                    <label for="path" class="block text-xs font-medium text-gray-400">Path</label>
+                    <input type="text" id="path" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+                </div>
+                <button type="submit" id="submitButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200">
+                    Analyze Directory
+                </button>
+            </form>
+
+            <!-- Message Area -->
+            <div id="messageArea" class="mt-4 text-center text-sm"></div>
+
+            <!-- Results Table -->
+            <div id="resultsContainer" class="mt-4 hidden">
+                <h3 class="text-lg font-semibold mb-2">Directory Contents</h3>
+                <div class="overflow-x-auto bg-gray-900 rounded-md max-h-64 overflow-y-auto">
+                    <table id="resultsTable" class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="px-2 py-1 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                                <th class="px-2 py-1 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Type</th>
+                                <th class="px-2 py-1 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Size</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody" class="bg-gray-800 divide-y divide-gray-700">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slideshow Container -->
+    <main id="slideshowContainer" class="fixed top-12 left-0 right-0 bottom-0 bg-black flex items-center justify-center">
+        <!-- Message for slideshow (loading/no images) -->
+        <div id="slideshowMessage" class="text-xl text-gray-400">Loading...</div>
+        
+        <!-- The Image -->
+        <img id="slideshowImage" src="" alt="Slideshow Image" class="object-contain w-full h-full opacity-0">
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gButton = document.getElementById('gButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            const repoForm = document.getElementById('repoForm');
+            const ownerInput = document.getElementById('owner');
+            const repoInput = document.getElementById('repo');
+            const pathInput = document.getElementById('path');
+            const submitButton = document.getElementById('submitButton');
+            
+            const repoInfo = document.getElementById('repoInfo');
+            const messageArea = document.getElementById('messageArea');
+            
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultsBody = document.getElementById('resultsBody');
+            
+            const slideshowContainer = document.getElementById('slideshowContainer');
+            const slideshowImage = document.getElementById('slideshowImage');
+            const slideshowMessage = document.getElementById('slideshowMessage');
+
+            let currentSlideshowImages = [];
+            let shuffledIndices = [];
+            let currentSlideIndex = 0;
+            let slideshowTimer = null;
+
+            const defaultOwner = "jsnb1976";
+            const defaultRepo = "Study";
+            const defaultPath = "Tardigradia Atlantis Eye Manufacturing Edutainment Ecological CIty/Tardigradia Atlantis Eeye-20251016T095102Z-1-001/Tardigradia Atlantis Eeye/";
+
+            function init() {
+                gButton.addEventListener('click', toggleDropdown);
+                repoForm.addEventListener('submit', handleFormSubmit);
+
+                ownerInput.value = defaultOwner;
+                repoInput.value = defaultRepo;
+                pathInput.value = defaultPath;
+                
+                updateRepoInfo(defaultOwner, defaultRepo, defaultPath);
+                analyzeDirectory(defaultOwner, defaultRepo, defaultPath);
+            }
+
+            function toggleDropdown() {
+                dropdownMenu.classList.toggle('hidden');
+            }
+
+            function updateRepoInfo(owner, repo, path) {
+                const displayPath = path ? `-${path.split('/').filter(Boolean).pop()}` : '';
+                repoInfo.textContent = `${owner}-${repo}${displayPath}`;
+            }
+
+            function handleFormSubmit(e) {
+                e.preventDefault();
+                const owner = ownerInput.value.trim();
+                const repo = repoInput.value.trim();
+                const path = pathInput.value.trim();
+                
+                if (!owner || !repo) {
+                    showMessage('Owner and Repo are required.', 'error');
+                    return;
+                }
+                
+                updateRepoInfo(owner, repo, path);
+                analyzeDirectory(owner, repo, path);
+                toggleDropdown(); 
+            }
+
+            async function analyzeDirectory(owner, repo, path) {
+                setLoading(true);
+                stopSlideshow();
+                resultsBody.innerHTML = '';
+                resultsContainer.classList.add('hidden');
+                slideshowMessage.textContent = 'Analyzing directory...';
+                slideshowMessage.classList.remove('hidden');
+                slideshowImage.classList.add('hidden');
+                slideshowImage.src = '';
+                currentSlideshowImages = [];
+
+                const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`GitHub API Error: ${errorData.message || response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!Array.isArray(data)) {
+                        throw new Error('Response is not a directory listing. Is the path correct?');
+                    }
+
+                    populateResultsTable(data);
+                    prepareSlideshow(data);
+                    showMessage('Directory analyzed successfully.', 'success');
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    showMessage(error.message, 'error');
+                    slideshowMessage.textContent = `Error: ${error.message}`;
+                } finally {
+                    setLoading(false);
+                }
+            }
+
+            function populateResultsTable(data) {
+                if (data.length === 0) {
+                    resultsContainer.classList.add('hidden');
+                    return;
+                }
+                
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-gray-700';
+                    
+                    const nameTd = document.createElement('td');
+                    nameTd.textContent = item.name;
+                    nameTd.className = 'px-2 py-1 whitespace-nowrap text-sm text-white';
+                    
+                    const typeTd = document.createElement('td');
+                    typeTd.textContent = item.type;
+                    typeTd.className = 'px-2 py-1 whitespace-nowrap text-sm text-gray-300';
+
+                    const sizeTd = document.createElement('td');
+                    sizeTd.textContent = item.type === 'file' ? formatBytes(item.size) : '---';
+                    sizeTd.className = 'px-2 py-1 whitespace-nowrap text-sm text-gray-300';
+                    
+                    tr.appendChild(nameTd);
+                    tr.appendChild(typeTd);
+                    tr.appendChild(sizeTd);
+                    resultsBody.appendChild(tr);
+                });
+                
+                resultsContainer.classList.remove('hidden');
+            }
+
+            function prepareSlideshow(data) {
+                const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp', '.svg'];
+                currentSlideshowImages = data
+                    .filter(item => 
+                        item.type === 'file' && 
+                        imageExtensions.some(ext => item.name.toLowerCase().endsWith(ext))
+                    )
+                    .map(item => item.download_url)
+                    .filter(url => url); 
+
+                if (currentSlideshowImages.length > 0) {
+                    startSlideshow();
+                } else {
+                    slideshowMessage.textContent = 'No displayable images found in this directory.';
+                    slideshowMessage.classList.remove('hidden');
+                    slideshowImage.classList.add('hidden');
+                }
+            }
+
+            function startSlideshow() {
+                stopSlideshow(); 
+                slideshowMessage.classList.add('hidden');
+                slideshowImage.classList.remove('hidden');
+                
+                shuffledIndices = Array.from({length: currentSlideshowImages.length}, (_, i) => i);
+                shuffleArray(shuffledIndices);
+                currentSlideIndex = 0;
+                
+                showNextSlide();
+            }
+
+            function showNextSlide() {
+                if (currentSlideshowImages.length === 0) {
+                    stopSlideshow();
+                    return;
+                }
+
+                if (currentSlideIndex >= shuffledIndices.length) {
+                    shuffleArray(shuffledIndices);
+                    currentSlideIndex = 0;
+                }
+
+                const imageIndex = shuffledIndices[currentSlideIndex];
+                const imageUrl = currentSlideshowImages[imageIndex];
+                
+                slideshowImage.onload = () => {
+                    slideshowImage.classList.remove('opacity-0');
+                    slideshowTimer = setTimeout(() => {
+                        slideshowImage.classList.add('opacity-0');
+                        setTimeout(showNextSlide, 200); 
+                    }, 40000); 
+                };
+                
+                slideshowImage.onerror = () => {
+                    console.warn(`Failed to load image: ${imageUrl}`);
+                    currentSlideIndex++;
+                    showNextSlide(); 
+                };
+
+                slideshowImage.src = imageUrl;
+                currentSlideIndex++;
+            }
+
+            function stopSlideshow() {
+                if (slideshowTimer) {
+                    clearTimeout(slideshowTimer);
+                }
+                slideshowTimer = null;
+                slideshowImage.onload = null;
+                slideshowImage.onerror = null;
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            function showMessage(message, type) {
+                messageArea.textContent = message;
+                messageArea.className = 'mt-4 text-center text-sm';
+                if (type === 'error') {
+                    messageArea.classList.add('text-red-400');
+                } else if (type === 'success') {
+                    messageArea.classList.add('text-green-400');
+                } else {
+                    messageArea.classList.add('text-gray-400');
+                }
+            }
+
+            function setLoading(isLoading) {
+                submitButton.disabled = isLoading;
+                if (isLoading) {
+                    submitButton.textContent = 'Analyzing...';
+                    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    submitButton.textContent = 'Analyze Directory';
+                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+
+            function formatBytes(bytes, decimals = 2) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
