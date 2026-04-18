@@ -137,15 +137,60 @@
   .overlay-top:hover {
     transform: translate(-50%, -50%) scale(1.05);
   }
+
+  /* * --------------------------------------------------------
+   * SLOW FADE TOOLTIP STYLES
+   * --------------------------------------------------------
+   */
+  .tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 250px;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    font-size: 11px;
+    font-weight: normal;
+    letter-spacing: normal;
+    white-space: normal;
+    pointer-events: none; /* Prevents tooltip from interfering with clicks */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  }
+
+  /* Position tooltip above the link for bottom overlays */
+  .overlay-bottom .tooltip-text {
+    bottom: 130%;
+  }
+
+  /* Position tooltip below the link for top overlays */
+  .overlay-top .tooltip-text {
+    top: 130%;
+    bottom: auto;
+  }
+
+  /* Trigger the slow fade on hover or active (touch) */
+  .edge-overlay-link:hover .tooltip-text,
+  .edge-overlay-link:active .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
 
   <div class="grid-container">
-    <iframe src="https://www.carrpod.net" title="External Domain Frame 1"></iframe>
-    <iframe src="https://fun.carrpod.net" title="External Domain Frame 2"></iframe>
-    <iframe src="https://oober.carrpod.net" title="External Domain Frame 3"></iframe>
-    <iframe src="https://jsnb76.github.io/002.an/001/index.html" title="External Domain Frame 4"></iframe>
+    <iframe src="https://www.carrpod.net" title="Carrington Storm Motors Safe Pod Engineering Company : Submersible Non-Inductive Life Ensuring Device Manufacturing"></iframe>
+    <iframe src="https://fun.carrpod.net" title="Tardigradia land 'o' lil oober-verse"></iframe>
+    <iframe src="https://oober.carrpod.net" title="Tardigradia land 'o' lil particle physics"></iframe>
+    <iframe src="https://jsnb76.github.io/002.an/001/index.html" title="Antikytherian : Induction Event Ready Technologies and Methods"></iframe>
 
     <div class="title-container">
       <svg viewBox="0 0 1000 80" width="95%" height="100%" preserveAspectRatio="xMidYMid meet">
@@ -164,10 +209,10 @@
       </svg>
     </div>
 
-    <iframe src="https://www.primebook.one" title="External Domain Frame 5"></iframe>
-    <iframe src="https://www.enupfs.com" title="External Domain Frame 6"></iframe>
-    <iframe src="https://github.com/jsnb1976/Study/tree/main/Carrington%20Storm%20Motors/%20Safe%20Pod%20Engineering%20Company" title="External Domain Frame 7"></iframe>
-    <iframe src="https://www.youtube.com/watch?v=n7h7jH2pGQY/" title="External Domain Frame 8"> Autoplay=1</iframe>
+    <iframe src="https://www.primebook.one" title="PrimeBook.One : Prime Difference Compression"></iframe>
+    <iframe src="https://www.instagram.com/jasonisaacbrodsky" title="LINK WORKS : Team Member Jason Brodsky !!!!!!!!!!!"></iframe>
+    <iframe src="https://github.com/jsnb1976/Study/tree/main/Carrington%20Storm%20Motors/%20Safe%20Pod%20Engineering%20Company" title="LINK WORKS : CarrPod Fabrications"></iframe>
+    <iframe src="https://www.youtube.com/watch?v=n7h7jH2pGQY/" title="LINK WORKS : The Big Adventures of Maya Tana & Buju in Tardigradia land 'o' lil "> Autoplay=1</iframe>
   </div>
 
   <script>
@@ -202,7 +247,14 @@
         link.textContent = websiteName;
         link.className = 'edge-overlay-link';
 
-        // 5. Apply bottom/top positioning based on the index
+        // 5. Create and append the slow fade tooltip text box
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltip-text';
+        // Populates the tooltip with the iframe title and full URL
+        tooltip.textContent = `${iframe.title || 'Link Info'}: ${iframe.src}`;
+        link.appendChild(tooltip);
+
+        // 6. Apply bottom/top positioning based on the index
         // Frames 0-3 (the first 4) go on the bottom line. 
         // Frames 4-7 (the last 4) go on the top line.
         if (index < 4) {
@@ -211,7 +263,7 @@
           link.classList.add('overlay-top');
         }
 
-        // 6. Add the link to the wrapper
+        // 7. Add the link to the wrapper
         wrapper.appendChild(link);
       });
     });
