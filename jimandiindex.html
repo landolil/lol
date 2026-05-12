@@ -24,7 +24,7 @@
     <nav class="fixed top-0 left-0 right-0 h-12 bg-gray-800 shadow-md flex items-center justify-between px-4 z-50">
         <div class="flex items-center space-x-3">
             <button id="gButton" class="bg-gray-700 hover:bg-gray-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center">
-                G
+                J
             </button>
 
             <button id="pausePlayButton" class="hidden bg-gray-700 hover:bg-gray-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center text-xs">
@@ -541,6 +541,79 @@
             init();
         });
     </script>
+
+
+
+
+
+<!-- START: Custom Contact Overlay -->
+<style>
+  :root {
+    /* --- CONFIGURATION VARIABLES --- */
+    --overlay-bg: rgba(0, 0, 0, 0.85); /* Semi-transparent black background */
+    --overlay-text: #ffffff;           /* White text */
+    --overlay-font-size: 0.70rem;      /* Super-small adjustable font size */
+    --overlay-z-index: 99999;          /* Keeps it on top of complex JS elements */
+    --overlay-padding: 6px 20px;       /* Spacing inside the bar */
+  }
+
+  .bottom-contact-overlay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--overlay-bg);
+    color: var(--overlay-text);
+    font-size: var(--overlay-font-size);
+    font-family: Arial, sans-serif;
+    z-index: var(--overlay-z-index);
+    
+    /* Flexbox pushes the left and right items to opposite sides */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    padding: var(--overlay-padding);
+    box-sizing: border-box;
+    
+    /* Prevents the invisible parts of the bar from blocking clicks on your page */
+    pointer-events: none; 
+  }
+
+  /* Re-enables clicking for the actual text/links inside the bar */
+  .bottom-contact-overlay .overlay-left,
+  .bottom-contact-overlay .overlay-right {
+    pointer-events: auto;
+  }
+
+  /* Link styling */
+  .bottom-contact-overlay a {
+    color: var(--overlay-text);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  .bottom-contact-overlay a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="bottom-contact-overlay">
+  <!-- LEFT SIDE: Email -->
+  <div class="overlay-left">
+    <a href="mailto:MrBrodsky@JimAndI.Art">MrBrodsky@JimAndI.Art</a>
+  </div>
+
+  <!-- RIGHT SIDE: URL -->
+  <div class="overlay-right">
+    <a href="http://www.tghc.pro" target="_blank" rel="noopener noreferrer">Jim And I Art <p>Tardigradia Holding Company &emsp; &emsp; www.tghc.pro</a>
+  </div>
+</div>
+<!-- END: Custom Contact Overlay -->
+
+
+
+
 </body>
 </html>
 ```
