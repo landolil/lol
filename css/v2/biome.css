@@ -1,0 +1,94 @@
+/* ================================================================
+   Tardigradia 2.0 — Biome Canvas Styles (LOL Enhanced)
+   Adds: glass tube border glow, microscope-slide background feel
+   ================================================================ */
+
+/* ── Canvas layers ───────────────────────────────────────────── */
+#trail-canvas,
+#biome-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+}
+
+#trail-canvas { z-index: 0; }
+#biome-canvas {
+  z-index: 1;
+  pointer-events: all;
+  cursor: crosshair;
+}
+
+#biome-canvas.pov-active { cursor: none; }
+
+/* ── Glass tube border (drawn by canvas engine — this styles the
+      outer page so it feels like a lab environment) ─────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -3;
+  background:
+    radial-gradient(ellipse 92% 88% at 50% 50%,
+      rgba(0,12,30,0) 70%,
+      rgba(0,0,8,0.95) 100%);
+}
+
+/* ── Interaction sparks ──────────────────────────────────────── */
+.biome-spark {
+  position: fixed;
+  pointer-events: none;
+  z-index: 4;
+  border-radius: 50%;
+  animation: sparkFade 0.55s ease-out forwards;
+}
+@keyframes sparkFade {
+  0%   { transform: scale(1);  opacity: 1; }
+  100% { transform: scale(3.5);opacity: 0; }
+}
+
+/* ── Save flash indicator ─────────────────────────────────────── */
+#save-flash {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 90;
+  border: 4px solid #22c55e;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+#save-flash.active { animation: saveFlash 0.65s ease-out forwards; }
+@keyframes saveFlash {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Toast notifications ─────────────────────────────────────── */
+#toast-container {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  pointer-events: none;
+}
+.toast {
+  background: rgba(5,8,20,0.93);
+  border: 1px solid rgba(56,189,248,0.4);
+  color: #e2e8f0;
+  font-family: 'Rajdhani','Orbitron',monospace;
+  font-size: 12px;
+  padding: 8px 18px; border-radius: 6px;
+  backdrop-filter: blur(8px);
+  animation: toastSlide 3.2s ease-out forwards;
+}
+@keyframes toastSlide {
+  0%   { opacity:0; transform:translateY(10px); }
+  15%  { opacity:1; transform:translateY(0); }
+  75%  { opacity:1; }
+  100% { opacity:0; transform:translateY(-5px); }
+}
+
+/* ── Lab tile subtle background ──────────────────────────────── */
+body {
+  background-color: #010208;
+}

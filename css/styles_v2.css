@@ -1,0 +1,198 @@
+/* ================================================================
+   Tardigradia 2.0 — styles_v2.css
+   Extension of styles.css for the v2 biome experience.
+   V2 adds: dark lab background, z-index layering, reduced opacity
+   on legacy sidebar/main panels so biome canvas shows through.
+   ================================================================ */
+
+/* ── Dark lab base ───────────────────────────────────────────── */
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  /* Dark microscope-slide background */
+  background-color: #010208;
+}
+
+/* V1 animation keyframes preserved */
+@keyframes moveUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100vh); }
+}
+@keyframes sway {
+  0%,100% { transform: translateX(0); }
+  25%     { transform: translateX(-10px); }
+  75%     { transform: translateX(10px); }
+}
+@keyframes sizeChange {
+  0%,100% { transform: scale(.5); }
+  50%     { transform: scale(0.1); }
+}
+
+/* Bubbles sit behind the biome canvas but above the CSS background */
+.floating-bubbles .bubble {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+}
+.floating-bubbles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;   /* V2: raised to sit between CSS bg and biome canvas */
+}
+
+/* ── V1 structural elements — transparent so biome shows through ─ */
+#sidebar {
+  width: 15%;
+  background-color: rgba(15,20,40,0.72);
+  padding: 0;
+  overflow-y: auto;
+  position: relative;
+  z-index: 15;
+  backdrop-filter: blur(4px);
+  border-right: 1px solid rgba(56,189,248,0.1);
+}
+
+#main-frame {
+  width: 70%;
+  padding: 0;
+  text-align: center;
+  overflow: auto;
+  position: relative;
+  z-index: 14;
+  /* Mostly transparent — biome canvas shows through the main area */
+  background-color: transparent;
+}
+
+/* Keep main image out of the way after initial load */
+#main-image {
+  max-width: 100%; height: auto;
+  opacity: 0.3;           /* V2: dim the background slide image */
+  transition: opacity 0.5s;
+}
+#main-image:hover { opacity: 0.8; }
+
+#details {
+  width: 15%;
+  background-color: rgba(15,20,40,0.72);
+  padding: 0;
+  overflow-y: auto;
+  position: relative;
+  z-index: 15;
+  backdrop-filter: blur(4px);
+  border-left: 1px solid rgba(56,189,248,0.1);
+}
+
+/* V1 title — keep it vivid above the biome */
+#details h1 {
+  color: rgba(56,189,248,0.85);
+  text-shadow: 0 0 18px rgba(56,189,248,0.6);
+  font-size: clamp(0.7rem, 1.5vw, 1.1rem);
+}
+
+.nav-bar {
+  width: 30px;
+  background-color: rgba(56,189,248,0.15);
+  border-left: 1px solid rgba(56,189,248,0.25);
+  padding: 1px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 15;
+  color: rgba(56,189,248,0.7);
+}
+
+/* ── V1 buttons — restyle for dark theme ──────────────────────── */
+button {
+  margin: 4px;
+  padding: 6px 8px;
+  background-color: rgba(56,189,248,0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+}
+button:hover { background-color: rgba(56,189,248,0.28); }
+
+/* ── Menu strip ───────────────────────────────────────────────── */
+#menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 16;
+  background: rgba(5,8,20,0.85);
+  backdrop-filter: blur(6px);
+  border-left: 1px solid rgba(56,189,248,0.15);
+  transition: width 0.15s;
+}
+.menu-button {
+  width: 100%;
+  padding: 5px;
+  margin: 2px 0;
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+
+/* ── Moving icons (v1 legacy — behind biome canvas) ───────────── */
+.moving-icons {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+.icon {
+  position: absolute;
+  width: 50px; height: 50px;
+  transition: transform 0.5s, width 0.5s, height 0.5s;
+}
+.icon:hover { z-index: 1000; }
+@keyframes move {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(30px); }
+  100% { transform: translateY(0); }
+}
+.microbe-icon {
+  width: 50px; height: 50px;
+  pointer-events: none; transition: transform 1s;
+  opacity: 0.6;
+  background-color: rgba(0,0,0,0.3);
+}
+
+/* ── Picture list in sidebar ──────────────────────────────────── */
+.picture-item { cursor: pointer; margin-bottom: 2px; }
+.picture-item img { width: 100%; height: auto; }
+.picture-item:hover { background-color: rgba(56,189,248,0.12); }
+
+table  { width: 100%; border-collapse: collapse; }
+td     { width: 100%; padding: 0; margin: 0; }
+img    { display: block; margin: 0 auto; }
+#slideshow-button, #stop-slideshow-button {
+  margin: 0; padding: 8px;
+  background-color: rgba(56,189,248,0.15);
+  color: #38bdf8; border: 1px solid rgba(56,189,248,0.3);
+  cursor: pointer; border-radius: 3px;
+}
+#slideshow-button:hover, #stop-slideshow-button:hover {
+  background-color: rgba(56,189,248,0.3);
+}
+
+/* ── Bobble animation (used by icon containers) ──────────────── */
+.icon-container {
+  position: absolute;
+  animation: bobble 5s infinite ease-in-out;
+}
+@keyframes bobble {
+  0%,100% { transform: translate(0,0) rotate(0); }
+  50%     { transform: translate(10px,10px) rotate(10deg); }
+}

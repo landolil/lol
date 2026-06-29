@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tardigradia : land 'o' lil</title>
+    <link rel="stylesheet" href="css/styles.css">
+ 
+</head>
+<body>
+
+    <script src="js/games2024/g0001/init/data_bubbles.js"></script>
+    <script src="js/games2024/g0001/bubbles/bubbles.js"></script>
+
+
+    <script src="js/games2024/g0004/init/data_background.js"></script>
+    <script src="js/games2024/g0004/background/background.js"></script>
+    <script> setRandomBackground(); </script>
+
+    <div id="sidebar"></div>
+    <div id="main-frame" top>
+    <img id="main-image" src="images/clearpixle.gif" alt="Select a picture">
+    </div>
+    <div id="details">
+		<center>
+		<H1>
+Tardi</br>
+gradia</br>
+land</br>
+'o'</br>
+	lil</h1></center>
+
+    </div>
+    <div id="nav-bar" class="nav-bar">Back</div>
+    <script src="js/games2024/g0001/init/data_bubbles.js"></script>
+    <script src="js/games2024/g0001/bubbles/bubbles.js"></script>
+
+
+    <script src="js/games2024/g0002/init/data_creatures.js"></script>
+    <script src="js/games2024/g0002/init/loadItems.js"></script>
+    <script src="js/games2024/g0002/creature/slideshow/slideshow.js"></script>
+
+    <script src="js/index/menu.js"></script>
+    <script src="js/index/buttons.js"></script>
+
+    <script src="js/games2024/g0006/speech/speech.js"></script>
+
+
+    <script src="js/games2024/g0008/init/logo_data.js"></script>
+	<script src="js/games2024/g0008/logo/logoshow/logoshow.js"></script>
+
+    <script src="js/games2024/g0009/init/stencil_data.js"></script>
+	<script src="js/games2024/g0009/stencil/stencilshow/stencilshow.js"></script>
+		
+    <script src="js/games2024/g0002/creature/icons/movingIcons.js"></script>
+    <script src="js/games2024/g0002/creature/icons/randomIcons.js"></script>
+    <script src="js/games2024/g0002/creature/icons/spinningIcons.js"></script>
+
+
+    <script src="js/games2024/g0003/source/crowdsource.js"></script> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+		
+            loadItems(data.phyla, 'phyla');
+	    logo_loadItems(data.ENGLISH, 'ENGLISH');
+	    stencil_loadItems(data.STENCIL, 'STENCIL');
+
+            createFloatingBubbles(bubbleImages);
+		
+			
+			
+			
+			
+            document.getElementById('release-microbes-button').addEventListener('click', () => {
+                const allImageUrls = createRandomIcons();
+                createMovingIcons(allImageUrls);
+            });
+
+            document.getElementById('spin-microbes-button').addEventListener('click', () => {
+                const allImageUrls = createRandomIcons();
+                createSpinningIcons(allImageUrls);
+            });
+
+            document.getElementById('founding-crowdsource-button').addEventListener('click', () => {
+                loadCrowdsourcePage('main-frame');
+            });
+            
+            document.getElementById('download-pdf-button').addEventListener('click', () => {
+                window.location.href = 'files/Tardigradia_land_o_lil_Multiphase_Vision_2024.pdf';
+            });
+
+            
+        });
+    </script>
+</body>
+</html>
