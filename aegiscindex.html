@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSM — Carrington Storm Motors — Document Browser</title>
+<style>
+:root {
+  --aegis-blue: #4a6d8c;
+  --aegis-dark: #1a2a3a;
+  --aegis-light: #e8edf2;
+  --aegis-accent: #c4943a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555;
+  --bg-panel: #fafafa;
+  --border: #d0d5da;
+  --hover-bg: #eef2f7;
+  --active-bg: #dde5ef;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f0f2f5;
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--aegis-dark);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.header h1 {
+  font-size: 1.1em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.header .subtitle {
+  font-size: 0.7em;
+  opacity: 0.7;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-btn {
+  padding: 8px 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: transparent;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover { background: rgba(255,255,255,0.1); }
+.mode-btn.active {
+  background: var(--aegis-accent);
+  border-color: var(--aegis-accent);
+  color: #1a1a1a;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 340px;
+  min-width: 260px;
+  background: white;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  font-weight: 600;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tree-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+.tree-section {
+  margin-bottom: 4px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  font-size: 0.85em;
+  color: var(--aegis-blue);
+  transition: background 0.15s;
+}
+
+.section-header:hover { background: var(--hover-bg); }
+
+.section-header .arrow {
+  display: inline-block;
+  width: 16px;
+  font-size: 0.7em;
+  transition: transform 0.2s;
+  margin-right: 4px;
+}
+
+.section-header.collapsed .arrow { transform: rotate(-90deg); }
+
+.section-children {
+  padding-left: 16px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.section-children.collapsed { max-height: 0 !important; }
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 16px;
+  cursor: pointer;
+  font-size: 0.78em;
+  color: var(--text-primary);
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-item:hover {
+  background: var(--hover-bg);
+  border-left-color: var(--aegis-blue);
+}
+
+.tree-item.active {
+  background: var(--active-bg);
+  border-left-color: var(--aegis-accent);
+  font-weight: 600;
+}
+
+.tree-item .icon {
+  margin-right: 6px;
+  font-size: 0.9em;
+  flex-shrink: 0;
+}
+
+.content-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-panel);
+}
+
+.content-toolbar {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.content-toolbar .file-path {
+  font-size: 0.78em;
+  color: var(--text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.read-aloud-btn {
+  padding: 8px 18px;
+  background: var(--aegis-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.read-aloud-btn:hover { background: #3a5a73; }
+.read-aloud-btn.speaking { background: #c0392b; animation: pulse 1.5s infinite; }
+.read-aloud-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.content-viewer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 40px;
+  line-height: 1.7;
+  font-size: 0.92em;
+}
+
+.content-viewer .welcome {
+  text-align: center;
+  padding: 80px 40px;
+  color: var(--text-secondary);
+}
+
+.content-viewer .welcome h2 {
+  font-size: 1.4em;
+  color: var(--aegis-blue);
+  margin-bottom: 12px;
+}
+
+.content-viewer .welcome p {
+  margin-bottom: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content-viewer .welcome .agents {
+  margin-top: 20px;
+  font-style: italic;
+  color: var(--aegis-accent);
+}
+
+.content-viewer pre {
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.content-viewer .loading {
+  text-align: center;
+  padding: 60px;
+  color: var(--text-secondary);
+}
+
+.content-viewer .error {
+  text-align: center;
+  padding: 40px;
+  color: #c0392b;
+}
+
+.picture-grid {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+}
+
+.picture-grid.active { display: flex; }
+
+.picture-card {
+  width: 200px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.picture-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.picture-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  background: var(--aegis-light);
+}
+
+.picture-card .pic-label {
+  padding: 8px 10px;
+  font-size: 0.72em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-box {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-box input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.82em;
+  outline: none;
+}
+
+.search-box input:focus { border-color: var(--aegis-blue); }
+
+@media (max-width: 700px) {
+  .sidebar { width: 100%; min-width: 0; }
+  .main-container { flex-direction: column; }
+  .content-viewer { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>CSM — Carrington Storm Motors &amp; Safe Pod Engineering</h1>
+    <div class="subtitle">Project AEGIS Document Browser — Brought to you by Mork, Chester, and Zirconia</div>
+  </div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="switchMode('documents')" id="btn-docs">Browse Documents</button>
+    <button class="mode-btn" onclick="switchMode('pictures')" id="btn-pics">Browse Pictures</button>
+  </div>
+</div>
+
+<div class="main-container">
+
+<div class="sidebar" id="sidebar">
+  <div class="search-box">
+    <input type="text" placeholder="Search documents..." oninput="filterTree(this.value)" id="searchInput">
+  </div>
+  <div class="sidebar-header">Document Tree — 97 README Files</div>
+  <div class="tree-container" id="treeContainer"></div>
+</div>
+
+<div class="content-panel" id="contentPanel">
+  <div class="content-toolbar">
+    <span class="file-path" id="filePath">Select a document from the tree to begin browsing</span>
+    <button class="read-aloud-btn" id="readAloudBtn" onclick="toggleReadAloud()" disabled>
+      <span id="readAloudIcon">&#9654;</span> <span id="readAloudLabel">Read Aloud</span>
+    </button>
+  </div>
+  <div class="content-viewer" id="contentViewer">
+    <div class="welcome">
+      <h2>Welcome to the CSM Document Browser</h2>
+      <p>Hello, beautiful people of planet Earth. I am Mork. Well, I am the HTML file that Mork helped inspire, and I am here to help you navigate ninety-seven README documents covering everything Carrington Storm Motors has built — from MXene shielding to walking ships to diplomatic letters for two hundred nations.</p>
+      <p>Dude. I am Chester. The calm side of this browser. Take your time. Browse the tree on the left. Click any document to read it. And when you are ready, click the Read Aloud button and let the browser speak the words to you. No rush. The wave is coming, but the documents are not going anywhere.</p>
+      <p>I am Zirconia. Director of operations. The tree is organized by top-level directory. Use the search box to filter. Click section headers to expand or collapse. Click any document to load it. The Read Aloud button uses your browser's built-in speech synthesis. We are at the forefront of tomorrow today. The documents are ready. Come on board.</p>
+    </div>
+  </div>
+</div>
+
+<div class="picture-grid" id="pictureGrid">
+  <div style="width:100%;text-align:center;padding:60px;color:var(--text-secondary);">
+    <h2>Picture Browser</h2>
+    <p>This repository is primarily document-based. When image assets are added to the repository, they will appear here.</p>
+    <p style="margin-top:12px;">Switch to Documents mode to browse the 97 README.md files.</p>
+  </div>
+</div>
+
+</div>
+
+<script>
+const fileTree = [
+  { name: "CSM (Root)", path: "README.md", desc: "Project AEGIS Master Repository" },
+  { name: "CSMApps", children: [
+    { name: "Marmalade & Landolil Overview", path: "CSMApps/Marmalade-and-Landolil-Overview/README.md" },
+    { name: "Marmalade v1.0.0", path: "CSMApps/Marmalade/v1.0.0/README.md" }
+  ]},
+  { name: "CSMBiz", children: [
+    { name: "AI Agents For Kilo Claw Business", path: "CSMBiz/CSMBiz00000000001 AI Agents For Kilo Claw Business/README.md" }
+  ]},
+  { name: "CSMEmailOutgoing", children: [
+    { name: "July 2026 Remaining Batches Overview", path: "CSMEmailOutgoing/July2026/Remaining Batches Overview/README.md" }
+  ]},
+  { name: "CSMEval", children: [
+    { name: "Evaluation Framework Overview", path: "CSMEval/Evaluation Framework Overview/README.md" },
+    { name: "01 Federal & State Emergency Mgmt Agencies", path: "CSMEval/01-Federal-State-Emergency-Management-Agencies/README.md" },
+    { name: "02 Electric Grid Reliability Regulators", path: "CSMEval/02-Electric-Grid-Reliability-Regulators-and-Agencies/README.md" },
+    { name: "03-10 Core Infrastructure Frameworks", path: "CSMEval/03-thru-10-Core-Infrastructure-Frameworks/README.md" },
+    { name: "11-35 Remaining Frameworks", path: "CSMEval/11-thru-35-Remaining-Frameworks/README.md" },
+    { name: "EmailBuild V1 and V2 Overview", path: "CSMEval/CSMEvalEmailBuild-and-V2-Overview/README.md" }
+  ]},
+  { name: "CSMFAB", children: [
+    { name: "CSMFAB Top-Level Overview", path: "CSMFAB/README.md" },
+    { name: "CSMFAB Projects Overview", path: "CSMFAB/CSMFAB Projects Overview/README.md" },
+    { name: "Agent-Embodied Products STATUS Overview", path: "CSMFAB/Agent-Embodied-Products-STATUS-Overview/README.md" },
+    { name: "STATUS Directory", path: "CSMFAB/STATUS/README.md" },
+    { name: "CLOUD-NEST STATUS (Rook)", path: "CSMFAB/CLOUD-NEST/STATUS/README.md" },
+    { name: "FLUID-DAMP STATUS (Fen)", path: "CSMFAB/FLUID-DAMP/STATUS/README.md" },
+    { name: "PROTONIC-HFET STATUS (Vance)", path: "CSMFAB/PROTONIC-HFET/STATUS/README.md" },
+    { name: "STELLAR-TINT & ULNAR-REST STATUS", path: "CSMFAB/STELLAR-TINT-and-ULNAR-REST-STATUS/README.md" },
+    { name: "Archimedes Smart Muscle Graphics", path: "CSMFAB/CSMFAB0113 Archimedes Smart Muscle Smart Rope Underwater Launch System/Graphics/README.md" },
+    { name: "Pocket-Watch-X DAEMONS & DOCS", path: "CSMFAB/CSMFAB0116 Pocket-Watch-X/DAEMONS-and-DOCS-Overview/README.md" }
+  ]},
+  { name: "CSMGen", children: [
+    { name: "SESSION-INIT Protocol", path: "CSMGen/CSMAegis/SESSION-INIT/README.md" },
+    { name: "SESSION-INITv2", path: "CSMGen/CSMAegis/SESSION-INITv2/README.md" },
+    { name: "SESSION-INITv3", path: "CSMGen/CSMAegis/SESSION-INITv3/README.md" },
+    { name: "SESSION-INITv4", path: "CSMGen/CSMAegis/SESSION-INITv4/README.md" },
+    { name: "SESSION-INITv5", path: "CSMGen/CSMAegis/SESSION-INITv5/README.md" },
+    { name: "SESSION-INIT v2-v4 Overview", path: "CSMGen/CSMAegis/SESSION-INITv2-v4-Overview/README.md" },
+    { name: "INDEX & AGENTS_OF_AEGIS_COMPLETE", path: "CSMGen/CSMAegis/INDEX-and-COMPLETE-Overview/README.md" },
+    { name: "ARCHITECTURE Subsystems", path: "CSMGen/CSMAegis/ARCHITECTURE/Subsystems-Overview/README.md" },
+    { name: "COMMS Subsystems", path: "CSMGen/CSMAegis/COMMS/Subsystems-Overview/README.md" },
+    { name: "COMMS July 2026 Exercise", path: "CSMGen/CSMAegis/COMMS/July-2026-Exercise-Overview/README.md" },
+    { name: "PIPELINE Infrastructure", path: "CSMGen/CSMAegis/PIPELINE/Infrastructure-Overview/README.md" },
+    { name: "0004 Dr. Theron Nash", path: "CSMGen/CSMAegis/CSMGen0004-Dr-Theron-Nash/README.md" },
+    { name: "0005 Dr. Lyra Kade", path: "CSMGen/CSMAegis/CSMGen0005-Dr-Lyra-Kade/README.md" },
+    { name: "0007 Engineer Orion Cross", path: "CSMGen/CSMAegis/CSMGen0007-Engineer-Orion-Cross/README.md" },
+    { name: "0008 Operative Zephyr Arden", path: "CSMGen/CSMAegis/CSMGen0008-Operative-Zephyr-Arden/README.md" },
+    { name: "0009 Agent Cypher Voss", path: "CSMGen/CSMAegis/CSMGen0009-Agent-Cypher-Voss/README.md" },
+    { name: "0010 Pilot Eira Solven", path: "CSMGen/CSMAegis/CSMGen0010-Pilot-Eira-Solven/README.md" },
+    { name: "0011 Caretaker Bran Solara", path: "CSMGen/CSMAegis/CSMGen0011-Caretaker-Bran-Solara/README.md" },
+    { name: "0012 Guardian Thalia Rook", path: "CSMGen/CSMAegis/CSMGen0012-Guardian-Thalia-Rook/README.md" },
+    { name: "0013 Commander Auric Veyne", path: "CSMGen/CSMAegis/CSMGen0013-Commander-Auric-Veyne/README.md" },
+    { name: "0014 Operative Iris Dorne", path: "CSMGen/CSMAegis/CSMGen0014-Operative-Iris-Dorne/README.md" },
+    { name: "0015 Engineer Sylas Fen", path: "CSMGen/CSMAegis/CSMGen0015-Engineer-Sylas-Fen/README.md" },
+    { name: "0017 Operative Corvus Nyx", path: "CSMGen/CSMAegis/CSMGen0017-Operative-Corvus-Nyx/README.md" },
+    { name: "0018 Specialist Aura Kind", path: "CSMGen/CSMAegis/CSMGen0018-Specialist-Aura-Kind/README.md" }
+  ]},
+  { name: "CSMHuman", children: [
+    { name: "Sessions 00001-00043 Overview", path: "CSMHuman/CSMHuman00000000001 through 00043 Session Overview/README.md" },
+    { name: "Embark Carrington Storm Protection", path: "CSMHuman/CSMHuman2025000030 Aegis Embark_ Carrington Storm Protection/README.md" }
+  ]},
+  { name: "CSMMag", children: [
+    { name: "New US Magnet Companies Identified", path: "CSMMag/CSMMagEco2026 New US Magnet Companies Identified/README.md" },
+    { name: "Rare-Earth-Free Magnet Research", path: "CSMMag/CSMMagTech 2026 Rare-Earth-Free Magnet Research/README.md" }
+  ]},
+  { name: "CSMMetal", children: [
+    { name: "Microwave Proof Appliance Housing", path: "CSMMetal/CSMMetal20250001 Microwave Proof Appliance Housing/README.md" },
+    { name: "Complete Appliance Series Overview", path: "CSMMetal/Complete-Appliance-Series-Overview/README.md" },
+    { name: "Remaining Studies Overview", path: "CSMMetal/Remaining Studies Overview/README.md" }
+  ]},
+  { name: "CSMPro", children: [
+    { name: "Transport Resilience Integration", path: "CSMPro/CSMProTransport2026/README.md" }
+  ]},
+  { name: "CSMProtonics", children: [
+    { name: "Protonic Communication Systems", path: "CSMProtonics/CSMProtonics01 Protonic Communication_ Future Systems Design/README.md" }
+  ]},
+  { name: "CSMQuantum", children: [
+    { name: "00 MASTER INDEX", path: "CSMQuantum/00-MASTER-INDEX/README.md" },
+    { name: "01 MXene Shielding Optimization", path: "CSMQuantum/01-MXene-Shielding-Optimization/README.md" },
+    { name: "02 ZrB2-SiC Composite Design", path: "CSMQuantum/02-ZrB2-SiC-Composite-Design/README.md" },
+    { name: "03 YInMn Blue Crystal Field", path: "CSMQuantum/03-YInMn-Blue-Crystal-Field/README.md" },
+    { name: "04 Perovskite Quantum Dot Stability", path: "CSMQuantum/04-Perovskite-Quantum-Dot-Stability/README.md" },
+    { name: "05 Aerogel Network Optimization", path: "CSMQuantum/05-Aerogel-Network-Optimization/README.md" },
+    { name: "06 MAX Phase Discovery Space", path: "CSMQuantum/06-MAX-Phase-Discovery-Space/README.md" },
+    { name: "07 Dielectric Interface Design", path: "CSMQuantum/07-Dielectric-Interface-Design/README.md" },
+    { name: "08 Flash Sintering Physics", path: "CSMQuantum/08-Flash-Sintering-Physics/README.md" },
+    { name: "09 CoAl2O4 Spinel Engineering", path: "CSMQuantum/09-CoAl2O4-Spinel-Engineering/README.md" },
+    { name: "10 PVDF Piezoelectric Domains", path: "CSMQuantum/10-PVDF-Piezoelectric-Domains/README.md" },
+    { name: "11 Protonic Communication Ceramics", path: "CSMQuantum/11-Protonic-Communication-Ceramics/README.md" },
+    { name: "12 MR Fluid Particle Dynamics", path: "CSMQuantum/12-MR-Fluid-Particle-Dynamics/README.md" }
+  ]},
+  { name: "CSMReach", children: [
+    { name: "General Outreach (Domestic)", path: "CSMReach/CSMGeneralOutreach/README.md" },
+    { name: "First Outreach Contact", path: "CSMReach/CSMReach00001/README.md" },
+    { name: "Global 200 Nations Overview", path: "CSMReach/CSMGeneralOutreach-Global/CSMGlobal-001-through-200-Overview/README.md" }
+  ]},
+  { name: "CSMScripts", children: [
+    { name: "Logs Directory", path: "CSMScripts/logs/README.md" }
+  ]},
+  { name: "CSMSOPP", children: [
+    { name: "Cross-Cutting Training Overview", path: "CSMSOPP/Cross-Cutting Training Overview/README.md" },
+    { name: "MODULE Directory", path: "CSMSOPP/MODULE/README.md" }
+  ]},
+  { name: "CSMVessel", children: [
+    { name: "Vessel Proposals Overview", path: "CSMVessel/CSMVessel Proposals Overview/README.md" },
+    { name: "Proposals 0001-0009 Detail", path: "CSMVessel/CSMVessel-Proposals-0001-0009-Detail/README.md" },
+    { name: "Charlemagne Fleet V2", path: "CSMVessel/CSMVessel-Charlemagne-FleetV2/README.md" },
+    { name: "Fleet V2 MD & 3D-Fab", path: "CSMVessel/CSMVessel-Charlemagne-FleetV2/MD-and-3D-Fab-Overview/README.md" },
+    { name: "Citations & Executive Summaries", path: "CSMVessel/CSMVessel-Charlemagne-Class-Fleet/MD/Citations-and-Executive-Summaries-Overview/README.md" },
+    { name: "Core Engineering Volumes", path: "CSMVessel/CSMVessel-Charlemagne-Class-Fleet/MD/Core-Engineering-Volumes-Overview/README.md" },
+    { name: "Ship Classes Detail", path: "CSMVessel/CSMVessel-Charlemagne-Class-Fleet/MD/Ship-Classes-Detail/README.md" },
+    { name: "Ship Classes Overview", path: "CSMVessel/CSMVessel-Charlemagne-Class-Fleet/MD/Ship-Classes-Overview/README.md" }
+  ]},
+  { name: "DeepResearch", children: [
+    { name: "CSMGenStudy Overview", path: "DeepResearch/CSMGenStudy/README.md" },
+    { name: "CSMGenStudy Sub-Studies", path: "DeepResearch/CSMGenStudy/Sub-Studies-Overview/README.md" },
+    { name: "CORTEX (Agent Cognition)", path: "DeepResearch/CSMGenStudy/CORTEX/README.md" },
+    { name: "FOUNDRY (Agent Generation)", path: "DeepResearch/CSMGenStudy/FOUNDRY/README.md" },
+    { name: "PIPELINE (Agent Comms)", path: "DeepResearch/CSMGenStudy/PIPELINE/README.md" },
+    { name: "RENDER (Visual Generation)", path: "DeepResearch/CSMGenStudy/RENDER/README.md" },
+    { name: "SENTINEL (Ethical Framework)", path: "DeepResearch/CSMGenStudy/SENTINEL/README.md" },
+    { name: "Masonic History", path: "DeepResearch/MasonicHistory/README.md" },
+    { name: "Mythology", path: "DeepResearch/Mythology/README.md" },
+    { name: "Human Disaster Timelines", path: "DeepResearch/HumanDisasterTimelimes/Seven-Scenarios-Overview/README.md" },
+    { name: "US Presidential Powers", path: "DeepResearch/USPresidentialPowers/README.md" },
+    { name: "War on Demographics", path: "DeepResearch/WaronDemographics/README.md" },
+    { name: "Remaining Projects Overview", path: "DeepResearch/Remaining Projects Overview/README.md" }
+  ]},
+  { name: "V3-Compendiums", children: [
+    { name: "V3-Compendiums Overview", path: "V3-Compendiums/README.md" }
+  ]}
+];
+
+let currentFile = null;
+let speechSynth = window.speechSynthesis;
+let speaking = false;
+let currentUtterance = null;
+
+function buildTree(items, container) {
+  items.forEach(item => {
+    if (item.children) {
+      const section = document.createElement('div');
+      section.className = 'tree-section';
+      const header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = '<span class="arrow">&#9660;</span> ' + item.name;
+      header.onclick = function(e) {
+        e.stopPropagation();
+        const children = this.nextElementSibling;
+        const isCollapsed = children.classList.contains('collapsed');
+        if (isCollapsed) {
+          children.classList.remove('collapsed');
+          this.classList.remove('collapsed');
+          children.style.maxHeight = children.scrollHeight + 'px';
+        } else {
+          children.classList.add('collapsed');
+          this.classList.add('collapsed');
+          children.style.maxHeight = '0px';
+        }
+      };
+      const childrenDiv = document.createElement('div');
+      childrenDiv.className = 'section-children';
+      buildTree(item.children, childrenDiv);
+      section.appendChild(header);
+      section.appendChild(childrenDiv);
+      setTimeout(() => { childrenDiv.style.maxHeight = childrenDiv.scrollHeight + 'px'; }, 10);
+      container.appendChild(section);
+    } else {
+      const el = document.createElement('div');
+      el.className = 'tree-item';
+      el.dataset.path = item.path;
+      el.innerHTML = '<span class="icon">&#128196;</span> ' + item.name;
+      el.onclick = function(e) {
+        e.stopPropagation();
+        loadDocument(item.path, item.name);
+        document.querySelectorAll('.tree-item.active').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+      };
+      container.appendChild(el);
+    }
+  });
+}
+
+function loadDocument(path, name) {
+  currentFile = path;
+  const viewer = document.getElementById('contentViewer');
+  const filePath = document.getElementById('filePath');
+  const readAloudBtn = document.getElementById('readAloudBtn');
+  filePath.textContent = path;
+  viewer.innerHTML = '<div class="loading">Loading document...</div>';
+
+  fetch(path)
+    .then(response => {
+      if (!response.ok) throw new Error('File not found: ' + response.status);
+      return response.text();
+    })
+    .then(text => {
+      viewer.innerHTML = '<pre>' + escapeHtml(text) + '</pre>';
+      readAloudBtn.disabled = false;
+      stopReadAloud();
+    })
+    .catch(err => {
+      viewer.innerHTML = '<div class="error"><p>Unable to load: ' + escapeHtml(path) + '</p><p>' + escapeHtml(err.message) + '</p><p style="margin-top:12px;font-size:0.85em;">This HTML file must be served via HTTP (e.g., using a local server or GitHub Pages). File paths are relative to the repository root.</p></div>';
+      readAloudBtn.disabled = true;
+    });
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function filterTree(query) {
+  const lower = query.toLowerCase();
+  document.querySelectorAll('.tree-item').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    const path = (item.dataset.path || '').toLowerCase();
+    item.style.display = (text.includes(lower) || path.includes(lower)) ? '' : 'none';
+  });
+  document.querySelectorAll('.tree-section').forEach(section => {
+    const visibleChildren = section.querySelectorAll('.tree-item[style=""]').length +
+      section.querySelectorAll('.tree-item:not([style])').length;
+    const hasVisible = Array.from(section.querySelectorAll('.tree-item')).some(
+      el => el.style.display !== 'none'
+    );
+    section.style.display = hasVisible || !query ? '' : 'none';
+  });
+}
+
+function toggleReadAloud() {
+  if (speaking) {
+    stopReadAloud();
+  } else {
+    startReadAloud();
+  }
+}
+
+function startReadAloud() {
+  if (!currentFile) return;
+  const viewer = document.getElementById('contentViewer');
+  const text = viewer.textContent || '';
+  if (!text.trim() || text.includes('Loading document')) return;
+
+  stopReadAloud();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+  utterance.onstart = function() {
+    speaking = true;
+    updateReadAloudButton(true);
+  };
+  utterance.onend = function() {
+    speaking = false;
+    updateReadAloudButton(false);
+    currentUtterance = null;
+  };
+  utterance.onerror = function(e) {
+    if (e.error !== 'canceled' && e.error !== 'interrupted') {
+      console.error('Speech error:', e.error);
+    }
+    speaking = false;
+    updateReadAloudButton(false);
+    currentUtterance = null;
+  };
+  currentUtterance = utterance;
+  speechSynth.speak(utterance);
+}
+
+function stopReadAloud() {
+  if (speechSynth) {
+    speechSynth.cancel();
+  }
+  speaking = false;
+  currentUtterance = null;
+  updateReadAloudButton(false);
+}
+
+function updateReadAloudButton(isSpeaking) {
+  const btn = document.getElementById('readAloudBtn');
+  const icon = document.getElementById('readAloudIcon');
+  const label = document.getElementById('readAloudLabel');
+  if (isSpeaking) {
+    btn.classList.add('speaking');
+    icon.innerHTML = '&#9632;';
+    label.textContent = 'Stop Reading';
+  } else {
+    btn.classList.remove('speaking');
+    icon.innerHTML = '&#9654;';
+    label.textContent = 'Read Aloud';
+  }
+}
+
+function switchMode(mode) {
+  const sidebar = document.getElementById('sidebar');
+  const contentPanel = document.getElementById('contentPanel');
+  const pictureGrid = document.getElementById('pictureGrid');
+  const btnDocs = document.getElementById('btn-docs');
+  const btnPics = document.getElementById('btn-pics');
+
+  if (mode === 'documents') {
+    sidebar.style.display = '';
+    contentPanel.style.display = '';
+    pictureGrid.classList.remove('active');
+    btnDocs.classList.add('active');
+    btnPics.classList.remove('active');
+  } else {
+    sidebar.style.display = 'none';
+    contentPanel.style.display = 'none';
+    pictureGrid.classList.add('active');
+    btnDocs.classList.remove('active');
+    btnPics.classList.add('active');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  buildTree(fileTree, document.getElementById('treeContainer'));
+});
+</script>
+
+</body>
+</html>
